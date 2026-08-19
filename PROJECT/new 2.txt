@@ -1,0 +1,272 @@
+#include <stdio.h>
+#include <string.h>
+
+#define FILENAME "calendar_notes.txt"
+
+typedef struct {
+    int day;        // Day of the month for the note
+    char text[200]; // Note text
+} Note;
+
+int getFirstDayOfTheYear(int year)
+{
+    int day = (year * 365 + ((year - 1) / 4) - ((year - 1) / 100) + ((year - 1) / 400)) % 7;
+    return day;
+}
+
+// Load notes from file
+void loadNotes(Note notes[12][31], int noteCount[12]) {
+    FILE *file = fopen(FILENAME, "r");
+    if(file != NULL) {
+        for(int m = 0; m < 12; m++) {
+            fscanf(file, "%d", &noteCount[m]);
+            for(int n = 0; n < noteCount[m]; n++) {
+                fscanf(file, "%d ", &notes[m][n].day);
+                fgets(notes[m][n].text, 200, file);
+                // remove newline
+                size_t len = strlen(notes[m][n].text);
+                if(len > 0 && notes[m][n].text[len-1]=='\n') notes[m][n].text[len-1]='\0';
+            }
+        }
+        fclose(file);
+    } else {
+        for(int m = 0; m < 12; m++) noteCount[m] = 0;
+    }
+}
+
+// Save notes to file
+void saveNotes(Note notes[12][31], int noteCount[12]) {
+    FILE *file = fopen(FILENAME, "w");
+    if(file != NULL) {
+        for(int m = 0; m < 12; m++) {
+            fprintf(file, "%d\n", noteCount[m]);
+            for(int n = 0; n < noteCount[m]; n++) {
+                fprintf(file, "%d %s\n", notes[m][n].day, notes[m][n].text);
+            }
+        }
+        fclose(file);
+    }
+}
+
+int main() {
+    char *months[] =  {"JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+                       "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};
+    int daysInMonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    int i,j,totalDays,weekDay=0,spaceCounter=0,year;
+    char choice;
+    Note notes[12][31]; // max 31 notes per month
+    int noteCount[12];  // number of notes per month
+
+    loadNotes(notes, noteCount);
+
+    printf("Enter your favorite year: ");
+    scanf("%d", &year);
+    getchar(); // consume newline
+
+    printf("\n*************** WELCOME TO %d *********************\n", year);
+
+    // Leap year check
+    if((year%4==0 && year%100!=0) || (year%400==0))
+        daysInMonth[1] = 29;
+
+    weekDay = getFirstDayOfTheYear(year);
+
+    for(i=0; i<12; i++) {
+        printf("\n\n-------------------- %s --------------------\n", months[i]);
+        printf("\n  SUN  MON  TUE  WED  THU  FRI  SAT\n\n");
+
+        for(spaceCounter = 1; spaceCounter <= weekDay; spaceCounter++)
+            printf("     ");
+
+        totalDays = daysInMonth[i];
+        for(j=1; j<=totalDays; j++){
+            printf("%5d", j);
+            weekDay++;
+            if(weekDay>6){
+                weekDay=0;
+                printf("\n");
+            }
+        }
+
+        // Display existing notes for this month
+        for(int n=0; n<noteCount[i]; n++)
+            printf("\nNote on %d: %s", notes[i][n].day, notes[i][n].text);
+
+        // Ask user to add/edit/delete note
+        printf("\n\nDo you want to add/edit/delete a note for %s? (a/e/d/n): ", months[i]);
+        scanf(" %c", &choice);
+        getchar(); // consume newline
+
+        if(choice=='a' || choice=='e') {
+            int day;
+            printf("Enter day of the month (1-%d): ", daysInMonth[i]);
+            scanf("%d", &day);
+            getchar(); // consume newline
+            printf("Enter your note: ");
+            fgets(notes[i][noteCount[i]].text, 200, stdin);
+            // remove newline
+            size_t len = strlen(notes[i][noteCount[i]].text);
+            if(len>0 && notes[i][noteCount[i]].text[len-1]=='\n') notes[i][noteCount[i]].text[len-1]='\0';
+            notes[i][noteCount[i]].day = day;
+            if(choice=='a') noteCount[i]++; // increment only if adding
+        } else if(choice=='d') {
+            noteCount[i] = 0; // delete all notes for month
+        }
+    }
+
+    saveNotes(notes, noteCount);
+
+    printf("\n\n=========== YOUR MEMORABLE NOTES FOR %d ===========\n", year);
+    for(i=0;i<12;i++){
+        for(int n=0;n<noteCount[i];n++){
+            printf("%s, Day %d: %s\n", months[i], notes[i][n].day, notes[i][n].text);
+        }
+    }
+
+    return 0;
+}
+Got it! We can enhance the program so that **each note can have a specific date** (day of the month) associated with it. Then, it will display the note **below the calendar on that specific date**. Here’s an updated version:
+
+```c
+#include <stdio.h>
+#include <string.h>
+
+#define FILENAME "calendar_notes.txt"
+
+typedef struct {
+    int day;        // Day of the month for the note
+    char text[200]; // Note text
+} Note;
+
+int getFirstDayOfTheYear(int year)
+{
+    int day = (year * 365 + ((year - 1) / 4) - ((year - 1) / 100) + ((year - 1) / 400)) % 7;
+    return day;
+}
+
+// Load notes from file
+void loadNotes(Note notes[12][31], int noteCount[12]) {
+    FILE *file = fopen(FILENAME, "r");
+    if(file != NULL) {
+        for(int m = 0; m < 12; m++) {
+            fscanf(file, "%d", &noteCount[m]);
+            for(int n = 0; n < noteCount[m]; n++) {
+                fscanf(file, "%d ", &notes[m][n].day);
+                fgets(notes[m][n].text, 200, file);
+                // remove newline
+                size_t len = strlen(notes[m][n].text);
+                if(len > 0 && notes[m][n].text[len-1]=='\n') notes[m][n].text[len-1]='\0';
+            }
+        }
+        fclose(file);
+    } else {
+        for(int m = 0; m < 12; m++) noteCount[m] = 0;
+    }
+}
+
+// Save notes to file
+void saveNotes(Note notes[12][31], int noteCount[12]) {
+    FILE *file = fopen(FILENAME, "w");
+    if(file != NULL) {
+        for(int m = 0; m < 12; m++) {
+            fprintf(file, "%d\n", noteCount[m]);
+            for(int n = 0; n < noteCount[m]; n++) {
+                fprintf(file, "%d %s\n", notes[m][n].day, notes[m][n].text);
+            }
+        }
+        fclose(file);
+    }
+}
+
+int main() {
+    char *months[] =  {"JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE",
+                       "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};
+    int daysInMonth[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    int i,j,totalDays,weekDay=0,spaceCounter=0,year;
+    char choice;
+    Note notes[12][31]; // max 31 notes per month
+    int noteCount[12];  // number of notes per month
+
+    loadNotes(notes, noteCount);
+
+    printf("Enter your favorite year: ");
+    scanf("%d", &year);
+    getchar(); // consume newline
+
+    printf("\n*************** WELCOME TO %d *********************\n", year);
+
+    // Leap year check
+    if((year%4==0 && year%100!=0) || (year%400==0))
+        daysInMonth[1] = 29;
+
+    weekDay = getFirstDayOfTheYear(year);
+
+    for(i=0; i<12; i++) {
+        printf("\n\n-------------------- %s --------------------\n", months[i]);
+        printf("\n  SUN  MON  TUE  WED  THU  FRI  SAT\n\n");
+
+        for(spaceCounter = 1; spaceCounter <= weekDay; spaceCounter++)
+            printf("     ");
+
+        totalDays = daysInMonth[i];
+        for(j=1; j<=totalDays; j++){
+            printf("%5d", j);
+            weekDay++;
+            if(weekDay>6){
+                weekDay=0;
+                printf("\n");
+            }
+        }
+
+        // Display existing notes for this month
+        for(int n=0; n<noteCount[i]; n++)
+            printf("\nNote on %d: %s", notes[i][n].day, notes[i][n].text);
+
+        // Ask user to add/edit/delete note
+        printf("\n\nDo you want to add/edit/delete a note for %s? (a/e/d/n): ", months[i]);
+        scanf(" %c", &choice);
+        getchar(); // consume newline
+
+        if(choice=='a' || choice=='e') {
+            int day;
+            printf("Enter day of the month (1-%d): ", daysInMonth[i]);
+            scanf("%d", &day);
+            getchar(); // consume newline
+            printf("Enter your note: ");
+            fgets(notes[i][noteCount[i]].text, 200, stdin);
+            // remove newline
+            size_t len = strlen(notes[i][noteCount[i]].text);
+            if(len>0 && notes[i][noteCount[i]].text[len-1]=='\n') notes[i][noteCount[i]].text[len-1]='\0';
+            notes[i][noteCount[i]].day = day;
+            if(choice=='a') noteCount[i]++; // increment only if adding
+        } else if(choice=='d') {
+            noteCount[i] = 0; // delete all notes for month
+        }
+    }
+
+    saveNotes(notes, noteCount);
+
+    printf("\n\n=========== YOUR MEMORABLE NOTES FOR %d ===========\n", year);
+    for(i=0;i<12;i++){
+        for(int n=0;n<noteCount[i];n++){
+            printf("%s, Day %d: %s\n", months[i], notes[i][n].day, notes[i][n].text);
+        }
+    }
+
+    return 0;
+}
+```
+
+### ✅ Features:
+
+1. Each note now has a **specific date** (`day` of the month).
+2. Existing notes are **loaded from file** (`calendar_notes.txt`) and shown under the calendar.
+3. You can **add, edit, or delete** notes.
+4. All notes are **saved to file** for future sessions.
+5. Display at the end shows **month, day, and note text**.
+
+This makes your calendar fully **interactive and persistent**, with **date-specific notes**.
+
+I can also make it **show the notes directly under the specific day in the calendar view**, so you can see them in the calendar grid itself.
+
+Do you want me to do that?

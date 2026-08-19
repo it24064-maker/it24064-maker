@@ -1,0 +1,191 @@
+Enter your favorite year :
+2020
+
+
+
+***************WELCOME TO 2020*********************
+
+
+
+
+-------------------- JANUARY--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                           1      2      3      4
+      5      6      7      8      9     10     11
+     12     13     14     15     16     17     18
+     19     20     21     22     23     24     25
+     26     27     28     29     30     31
+
+
+--------------------FEBRUARY--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                                                1
+      2      3      4      5      6      7      8
+      9     10     11     12     13     14     15
+     16     17     18     19     20     21     22
+     23     24     25     26     27     28     29
+
+
+
+--------------------MARCH--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+      1      2      3      4      5      6      7
+      8      9     10     11     12     13     14
+     15     16     17     18     19     20     21
+     22     23     24     25     26     27     28
+     29     30     31
+
+
+--------------------APRIL--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                           1      2      3      4
+      5      6      7      8      9     10     11
+     12     13     14     15     16     17     18
+     19     20     21     22     23     24     25
+     26     27     28     29     30
+
+
+--------------------MAY--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                                         1      2
+      3      4      5      6      7      8      9
+     10     11     12     13     14     15     16
+     17     18     19     20     21     22     23
+     24     25     26     27     28     29     30
+     31
+
+
+--------------------JUNE--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+             1      2      3      4      5      6
+      7      8      9     10     11     12     13
+     14     15     16     17     18     19     20
+     21     22     23     24     25     26     27
+     28     29     30
+
+
+--------------------JULY--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                           1      2      3      4
+      5      6      7      8      9     10     11
+     12     13     14     15     16     17     18
+     19     20     21     22     23     24     25
+     26     27     28     29     30     31
+
+
+--------------------AUGUST--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                                                1
+      2      3      4      5      6      7      8
+      9     10     11     12     13     14     15
+     16     17     18     19     20     21     22
+     23     24     25     26     27     28     29
+     30     31
+
+
+--------------------SEPTEMBER--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                    1      2      3      4      5
+      6      7      8      9     10     11     12
+     13     14     15     16     17     18     19
+     20     21     22     23     24     25     26
+     27     28     29     30
+
+
+--------------------OCTOBER--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                                  1      2      3
+      4      5      6      7      8      9     10
+     11     12     13     14     15     16     17
+     18     19     20     21     22     23     24
+     25     26     27     28     29     30     31
+
+
+
+--------------------NOVEMBER--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+      1      2      3      4      5      6      7
+      8      9     10     11     12     13     14
+     15     16     17     18     19     20     21
+     22     23     24     25     26     27     28
+     29     30
+
+
+--------------------DECEMBER--------------------------
+
+    SUN    MON    TUE    WEB    THU    FRI    SAT
+
+                    1      2      3      4      5
+      6      7      8      9     10     11     12
+     13     14     15     16     17     18     19
+     20     21     22     23     24     25     26
+     27     28     29     30     31
+
+=== Code Execution Successful ===
+// Online C compiler to run C program online
+#include <stdio.h>
+int getFirstDayOfTheYear(int year)
+{
+    int day = (year * 365 + ((year - 1) / 4) - ((year - 1) / 100) + ((year - 1) / 400)) % 7;
+    return day;
+}
+
+int main() {
+    char *months[] =  {" JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"};
+    int daysInMonth[]={31, 28, 31, 30, 31,30,31,31, 30, 31, 30,31};
+    int i, j, totalDays, weekDay = 0, spaceCounter = 0, year;
+    printf("Enter your favorite year :\n");
+    scanf("%d",&year);
+        printf("\n\n\n***************WELCOME TO %d*********************\n\n", year);
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+    daysInMonth[1] = 29;  
+{
+}
+weekDay = getFirstDayOfTheYear(year);
+
+    for(i = 0 ; i< 12 ; i++)
+    {
+        printf("\n\n\n--------------------%s--------------------------\n", months[i]);
+        printf("\n    SUN    MON    TUE    WEB    THU    FRI    SAT\n\n");
+        
+        for(spaceCounter = 1; spaceCounter <= weekDay; spaceCounter++ )
+        {
+            printf("       ");
+        }
+        totalDays = daysInMonth[i];
+        for(j = 1; j <= totalDays; j++)
+        {
+            printf("%7d", j);
+            weekDay++;
+            if(weekDay> 6)
+            {
+                weekDay = 0;
+                printf("\n");
+            }
+            
+        }
+    }
+    return 0;
+}

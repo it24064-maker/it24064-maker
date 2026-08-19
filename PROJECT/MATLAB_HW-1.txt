@@ -1,0 +1,154 @@
+f = @(x) 2^x - 5*x + 2;   % function define
+a = 0;
+b = 1;
+n = 30;
+e = 0.0001;
+
+if f(a) * f(b) < 0
+fprintf('Iter\t a\t\t b\t\t c\t\tf(c)\n');
+    fprintf('--------------------------------------------------------------\n');
+    for i = 1:n
+        c = (a + b) / 2;   
+        fprintf('%2d\t%10.6f\t%10.6f\t%10.6f\t%10.6f\n', i, a, b, c, f(c));
+        if abs(c-b)<e || abs(c-a)<e
+        break
+        end
+        if f(a) * f(c) < 0
+            b = c;
+        else
+            a = c;
+        end
+        
+       end
+       fprintf('\nApproximate root after %d iterations = %.6f\n', i, c);
+       
+else
+    disp('No root between given brackets')
+end
+
+
+
+
+f = @(x) x^3 - x - 2;   % function define
+a = 1;
+b = 2;
+n = 30;
+e = 0.0001;
+
+if f(a) * f(b) < 0
+fprintf('Iter\t a\t\t b\t\t c\t\tf(c)\n');
+    fprintf('--------------------------------------------------------------\n');
+    for i = 1:n
+        c = (a + b) / 2;   
+        fprintf('%2d\t%10.6f\t%10.6f\t%10.6f\t%10.6f\n', i, a, b, c, f(c));
+        if abs(c-b)<e || abs(c-a)<e
+        break
+        end
+        if f(a) * f(c) < 0
+            b = c;
+        else
+            a = c;
+        end
+        
+       end
+       fprintf('\nApproximate root after %d iterations = %.6f\n', i, c);
+       
+else
+    disp('No root between given brackets')
+end
+
+
+
+
+
+f = @(x) x^2-5;   % function define
+a = 0;
+b = 3;
+n = 30;
+e = 0.0001;
+
+if f(a) * f(b) < 0
+fprintf('Iter\t a\t\t b\t\t c\t\tf(c)\n');
+    fprintf('--------------------------------------------------------------\n');
+    for i = 1:n
+        c = (a + b) / 2;   
+        fprintf('%2d\t%10.6f\t%10.6f\t%10.6f\t%10.6f\n', i, a, b, c, f(c));
+        if abs(c-b)<e || abs(c-a)<e
+        break
+        end
+        if f(a) * f(c) < 0
+            b = c;
+        else
+            a = c;
+        end
+        
+       end
+       fprintf('\nApproximate root after %d iterations = %.6f\n', i, c);
+       
+else
+    disp('No root between given brackets')
+end
+
+
+
+f = @(x) e^x - 3*x;   % function define
+a = 1;
+b = 2;
+n = 30;
+e = 0.0001;
+
+if f(a) * f(b) < 0
+fprintf('Iter\t a\t\t b\t\t c\t\tf(c)\n');
+    fprintf('--------------------------------------------------------------\n');
+    for i = 1:n
+        c = (a + b) / 2;   
+        fprintf('%2d\t%10.6f\t%10.6f\t%10.6f\t%10.6f\n', i, a, b, c, f(c));
+        if abs(c-b)<e || abs(c-a)<e
+        break
+        end
+        if f(a) * f(c) < 0
+            b = c;
+        else
+            a = c;
+        end
+        
+       end
+       fprintf('\nApproximate root after %d iterations = %.6f\n', i, c);
+       
+else
+    disp('No root between given brackets')
+end
+
+
+
+
+
+
+f = @(x) x.*exp(x) - 1;
+a = 0;
+b = 1;
+n = 30;
+e = 0.0001;
+
+if f(a) * f(b) < 0
+fprintf('Iter\t a\t\t b\t\t c\t\tf(c)\n');
+    fprintf('--------------------------------------------------------------\n');
+    for i = 1:n
+        c = (a + b) / 2;   
+        fprintf('%2d\t%10.6f\t%10.6f\t%10.6f\t%10.6f\n', i, a, b, c, f(c));
+        if abs(c-b)<e || abs(c-a)<e
+        break
+        end
+        if f(a) * f(c) < 0
+            b = c;
+        else
+            a = c;
+        end
+        
+       end
+       fprintf('\nApproximate root after %d iterations = %.6f\n', i, c);
+       
+else
+    disp('No root between given brackets')
+end
+
